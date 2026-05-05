@@ -15,6 +15,9 @@ const skills = [
   "Reactjs",
   "React-Native",
   "GraphQL",
+  "AI Automation (n8n)",
+  "Linux",
+  "Shell Scripting"
 ];
 
 const Skills = () => {

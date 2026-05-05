@@ -11,6 +11,10 @@ const projects = [
     title: "Puplar",
     url: "https://puplar.com/",
   },
+  {
+    title: "Awasource",
+    url: "https://www.awasource.com/"
+  }
 ];
 
 const Projects = () => {
