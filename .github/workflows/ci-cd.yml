@@ -20,12 +20,11 @@ jobs:
       - run: npm ci
       - run: npm run build
 
-      # This creates an "artifact" so the deploy job can use the built files
       - name: Upload Build Artifact
         uses: actions/upload-artifact@v4
         with:
           name: build-files
-          path: dist  # Change this to 'build' if you are NOT using Vite
+          path: dist
 
   deploy:
     needs: build
@@ -38,13 +37,21 @@ jobs:
           name: build-files
           path: ./dist
 
+      - name: Clear old build on server
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USERNAME }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: rm -rf /var/www/html/*
+
       - name: Deploy to EC2
-        uses: appleboy/scp-action@master
+        uses: appleboy/scp-action@v0.1.7
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USERNAME }}
           key: ${{ secrets.EC2_SSH_KEY }}
           port: 22
           source: "./dist/*"
-          target: "/var/www/html"
+          target: "/var/www/html/"
           strip_components: 1
